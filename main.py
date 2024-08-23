@@ -37,6 +37,7 @@ my_classes = ['fire_alert', 'air_alert', 'disaster_alert', 'warning_alert', 'dog
               'washing_machine', 'clock_tick', 'sneezing', 'rooster', 'sea_waves', 'siren', 'cat', 'door_wood_creaks', 'crickets']
 
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3MB
 
 def load_wav_16k_mono(filename):
     """Load a WAV file, convert it to a float tensor, resample to 16 kHz single-channel audio, and normalize."""
