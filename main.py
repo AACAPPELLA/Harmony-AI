@@ -39,9 +39,9 @@ my_classes = ['fire_alert', 'air_alert', 'disaster_alert', 'warning_alert', 'dog
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024  # 3MB
 
-def load_wav_16k_mono(filename):
+def load_wav_16k_mono(file_stream):
     """Load a WAV file, convert it to a float tensor, resample to 16 kHz single-channel audio, and normalize."""
-    file_contents = tf.io.read_file(filename)
+    file_contents = file_stream.read()
     
     # 디코딩, 단일 채널로 변환
     wav, sample_rate = tf.audio.decode_wav(file_contents, desired_channels=1)
@@ -70,11 +70,8 @@ def predict():
         if file.filename == '':
             return jsonify({'error': 'No selected file'})
         
-        filepath = file.filename
-        file.save(filepath)
-        
         # WAV 파일 로드 및 정규화
-        testing_wav_data = load_wav_16k_mono(filepath)
+        testing_wav_data = load_wav_16k_mono(file)
         
         # 텐서를 1D로 만듦
         testing_wav_data = tf.reshape(testing_wav_data, [-1])
